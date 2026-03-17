@@ -1,72 +1,85 @@
+import { Suspense } from "react";
 import HeroMarketplace from "./components/HeroMarketplace";
 import OfertasDelDia from "./components/OfertasDelDia";
-import CategoriasDestacadas from "./components/CategoríasDestacadas";
+import CategoriasDestacadas from "./components/CategoriasDestacadas";
 import TiendasDestacadas from "./components/TiendasDestacadas";
-import ExplorarCategorias from "./components/ExplorarCategorias";
+import UltimosProductos from "./components/UltimosProductos";
 import ComoFunciona from "./components/ComoFunciona";
 import Beneficios from "./components/Beneficios";
-import UltimosProductos from "./components/UltimosProductos";
+import ProductosGrid from "./components/ProductosGrid";
 
-// ===================== META SEO NIVEL DIOS =====================
 export const metadata = {
   title: "Marketplace | Waste Store – R&R Kelab S.A.S",
   description:
-    "Marketplace digital para la comercialización segura de materiales aprovechables, maquinaria y servicios en Colombia. Descubra cómo funcionará Waste Store y su contribución a la economía circular.",
-  keywords: [
-    "marketplace residuos",
-    "reciclaje digital",
-    "materiales aprovechables",
-    "economía circular",
-    "Waste Store",
-    "Colombia",
-    "comercialización residuos",
-    "plataforma residuos",
-    "trazabilidad residuos",
-  ],
-  authors: [{ name: "R&R Kelab S.A.S" }],
-  robots: "index, follow",
-  openGraph: {
-    title: "Marketplace Waste Store | R&R Kelab S.A.S",
-    description:
-      "Comercialice y adquiera materiales aprovechables de forma segura y ágil en el marketplace de Waste Store, impulsando la sostenibilidad y economía circular.",
-    url: "https://kelab.com.co/marketplace",
-    type: "website",
-    images: [
-      {
-        url: "https://kelab.com.co/preview-marketplace.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Marketplace Waste Store - R&R Kelab",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Marketplace Waste Store",
-    description:
-      "Descubra el marketplace digital de Waste Store para materiales aprovechables, servicios y maquinaria en Colombia.",
-    images: ["https://kelab.com.co/preview-marketplace.jpg"],
-  },
-  alternates: {
-    canonical: "https://kelab.com.co/marketplace",
-  },
-  category: "Marketplace, Gestión de Residuos, Economía Circular",
-  publisher: "R&R Kelab S.A.S",
+    "Marketplace digital para la comercialización segura de materiales aprovechables.",
 };
 
-export default function MarketplacePage() {
+export default async function MarketplacePage({ searchParams }) {
+  const sp = await searchParams;
+
+  const hasFilters = !!(
+    sp.name ||
+    sp.categoryId ||
+    sp.minPrice ||
+    sp.maxPrice ||
+    sp.city ||
+    sp.page
+  );
+
   return (
-    <main className="bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+    <main className="bg-gray-50 min-h-screen">
+      <div className="max-w-7xl mx-auto">
         <HeroMarketplace />
-        <OfertasDelDia />
-        <CategoriasDestacadas />
-        <TiendasDestacadas />
-        <ExplorarCategorias />
-        <ComoFunciona />
-        <Beneficios />
-        <UltimosProductos />
+
+        {hasFilters ? (
+          <Suspense fallback={<GridSkeleton />}>
+            <ProductosGrid searchParams={sp} />
+          </Suspense>
+        ) : (
+          <>
+            <Suspense fallback={<SectionSkeleton />}>
+              <OfertasDelDia />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <CategoriasDestacadas />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <TiendasDestacadas />
+            </Suspense>
+            <Suspense fallback={<SectionSkeleton />}>
+              <UltimosProductos />
+            </Suspense>
+            <ComoFunciona />
+          </>
+        )}
       </div>
+      <Beneficios />
     </main>
+  );
+}
+
+function SectionSkeleton() {
+  return (
+    <div className="mb-10 animate-pulse">
+      <div className="h-6 w-48 bg-gray-200 rounded-lg mb-4" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-64 bg-gray-200 rounded-2xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function GridSkeleton() {
+  return (
+    <div className="animate-pulse">
+      <div className="h-14 bg-gray-200 rounded-xl mb-6" />
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="h-72 bg-gray-200 rounded-2xl" />
+        ))}
+      </div>
+    </div>
   );
 }

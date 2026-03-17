@@ -1,86 +1,108 @@
-// app/(market)/marketplace/components/CategoriasDestacadas.jsx
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import { Flame, Store } from "lucide-react";
+import Image from "next/image";
+import { Flame, Store, MapPin } from "lucide-react";
+import { getFeaturedProducts, formatPrice } from "@/lib/api/marketplace";
 
-import { products } from "../data/products";
-import { companies } from "../data/companies";
-
-export default function CategoriasDestacadas() {
-  // Ofertas del día → primeros 3 productos
-  const ofertas = products.slice(0, 3);
+export default async function OfertasDelDia() {
+  let products = [];
+  try {
+    products = await getFeaturedProducts();
+  } catch {
+    return null;
+  }
+  if (!products.length) return null;
 
   return (
-    <section className="py-24 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#000180]">
-            Ofertas del día 🔥
-          </h2>
-          <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-            Aprovecha los productos destacados de hoy, ofrecidos por empresas
-            del marketplace.
-          </p>
+    <section className="mb-10">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center">
+            <Flame className="w-4 h-4 text-orange-500" />
+          </div>
+          <div>
+            <h2 className="text-lg font-medium text-[#000180]">
+              Destacados del día
+            </h2>
+            <p className="text-xs text-gray-500">
+              Productos seleccionados por el equipo
+            </p>
+          </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {ofertas.map((product) => {
-            const company = companies.find((c) => c.id === product.companyId);
+        <Link
+          href="/?sortBy=featured"
+          className="text-xs font-medium text-[#45C93E] hover:text-[#000180] transition-colors"
+        >
+          Ver todos →
+        </Link>
+      </div>
 
-            return (
-              <Link
-                key={product.id}
-                href={`/productos/${product.slug}`}
-                className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300"
-              >
-                {/* Imagen */}
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={
-                      product.image || "/marketplace/product-placeholder.jpg"
-                    }
-                    alt={product.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-
-                  {/* Badge oferta */}
-                  <div className="absolute top-4 left-4 bg-[#45C93E] text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                    <Flame className="w-4 h-4" />
-                    Oferta
-                  </div>
+      <div
+        className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory
+                   md:grid md:grid-cols-3 lg:grid-cols-4 md:overflow-visible md:pb-0"
+      >
+        {products.slice(0, 8).map((p) => (
+          <Link
+            key={p.id}
+            href={`/productos/${p.id}`}
+            className="group flex-shrink-0 w-60 md:w-auto snap-start
+                       bg-white rounded-2xl overflow-hidden border border-gray-100
+                       hover:border-orange-200 hover:shadow-lg transition-all"
+          >
+            {/* Imagen */}
+            <div className="relative h-40 bg-gray-50 overflow-hidden">
+              {p.mainImageUrl ? (
+                <Image
+                  src={p.mainImageUrl}
+                  alt={p.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-4xl">
+                  {p.categoryIcon || "♻️"}
                 </div>
+              )}
 
-                {/* Contenido */}
-                <div className="p-6 space-y-2">
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {product.title}
-                  </h3>
+              <div className="absolute top-2 left-2 flex items-center gap-1 bg-orange-500 text-white text-[10px] font-medium px-2 py-0.5 rounded-full">
+                <Flame className="w-2.5 h-2.5" /> Destacado
+              </div>
+            </div>
 
-                  <p className="text-[#45C93E] font-bold text-lg">
-                    ${product.price}
-                  </p>
+            {/* Body */}
+            <div className="p-3 flex flex-col gap-2 min-w-0">
+              {/* Nombre */}
+              <h3 className="font-medium text-sm text-gray-900 line-clamp-2 group-hover:text-[#000180] transition-colors min-h-[2.5rem] break-words">
+                {p.name}
+              </h3>
 
-                  {/* Empresa */}
-                  {company && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Store className="w-4 h-4 text-[#000180]" />
-                      <span>{company.name}</span>
-                    </div>
-                  )}
+              {/* Store */}
+              <div className="flex items-center gap-1 text-[11px] text-gray-400 min-w-0">
+                <Store className="w-3 h-3 shrink-0" />
+                <span className="truncate min-w-0">{p.storeName}</span>
 
-                  <span className="inline-block text-sm text-[#45C93E] font-medium mt-2">
-                    Ver oferta →
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                {p.storeCity && (
+                  <>
+                    <span className="shrink-0">·</span>
+                    <MapPin className="w-3 h-3 shrink-0" />
+                    <span className="truncate min-w-0">{p.storeCity}</span>
+                  </>
+                )}
+              </div>
+
+              {/* ✅ PRECIO 100% SEGURO */}
+              <div className="pt-2 border-t border-gray-100 min-w-0">
+                <p className="text-[#45C93E] font-medium text-base leading-tight break-words">
+                  {formatPrice(p.price)}
+                </p>
+
+                <span className="text-[11px] text-gray-400 group-hover:text-[#45C93E] transition-colors">
+                  Ver más →
+                </span>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
