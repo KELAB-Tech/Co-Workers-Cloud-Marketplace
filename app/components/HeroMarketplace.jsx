@@ -13,7 +13,7 @@ const STATIC_SLIDES = [
     title: "El reciclaje ya no\nes opcional",
     sub: "Materiales aprovechables verificados. Conectamos recicladores, transformadores y transportadores en una sola plataforma.",
     cta: "Explorar materiales",
-    href: "#productos",
+    href: "/categorias",
     bg: "from-[#000120] via-[#000180] to-[#001fb3]",
     accent: "#45C93E",
     icon: Recycle,
@@ -23,7 +23,7 @@ const STATIC_SLIDES = [
     title: "Residuos convertidos\nen valor real",
     sub: "Comercio circular inteligente. Transparencia, trazabilidad y confianza para cada negociación entre empresas.",
     cta: "Ver tiendas",
-    href: "/marketplace/tiendas",
+    href: "/actores",
     bg: "from-[#0b3d1c] via-[#166534] to-[#15803d]",
     accent: "#ffffff",
     icon: TrendingUp,
@@ -144,7 +144,7 @@ export default function HeroMarketplace() {
                 transition={{ delay: i * 0.1 }}
               >
                 <Link
-                  href={`/marketplace/productos/${p.id}`}
+                  href={`/productos/${p.id}`}
                   className="flex items-center gap-4 bg-white/10 backdrop-blur border border-white/15 rounded-2xl p-3 hover:bg-white/20 transition-all group"
                 >
                   <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-white/10">
