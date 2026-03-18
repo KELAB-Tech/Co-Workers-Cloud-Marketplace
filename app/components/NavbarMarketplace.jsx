@@ -8,7 +8,9 @@ import { ShoppingCart, Search, Menu, X, Loader2 } from "lucide-react";
 import { useCartStore } from "../store/cartStore";
 import { formatPrice } from "@/lib/api/marketplace";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://backend-co-workers-cloud.onrender.com/api";
 
 export default function NavbarMarketplace() {
   const router = useRouter();
@@ -130,7 +132,7 @@ export default function NavbarMarketplace() {
                 {results.map((r) => (
                   <Link
                     key={r.id}
-                    href={`/marketplace/productos/${r.id}`}
+                    href={`/productos/${r.id}`}
                     onClick={closeAll}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
                   >

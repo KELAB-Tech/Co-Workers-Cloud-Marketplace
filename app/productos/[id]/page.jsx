@@ -78,7 +78,7 @@ export default async function ProductDetailPage({ params }) {
         {/* BREADCRUMB */}
         <nav className="flex items-center gap-2 text-xs text-gray-400 mb-6 min-w-0">
           <Link
-            href="/marketplace"
+            href="/"
             className="hover:text-[#000180] transition-colors flex items-center gap-1 shrink-0"
           >
             <ArrowLeft className="w-3 h-3" /> Marketplace
@@ -89,7 +89,7 @@ export default async function ProductDetailPage({ params }) {
           {product.categoryName && (
             <>
               <Link
-                href={`/marketplace?categoryId=${product.categoryId}`}
+                href={`/?categoryId=${product.categoryId}`}
                 className="hover:text-[#000180] transition-colors truncate"
               >
                 {product.categoryIcon} {product.categoryName}
@@ -236,7 +236,7 @@ export default async function ProductDetailPage({ params }) {
 
             {/* TIENDA */}
             <Link
-              href={`/marketplace/tienda/${product.storeId}`}
+              href={`/tienda/${product.storeId}`}
               className="flex items-center gap-3 p-4 rounded-2xl bg-gray-50 border border-gray-200 hover:border-[#45C93E]/50 hover:shadow-md transition-all group min-w-0"
             >
               <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 bg-white border border-gray-200 flex items-center justify-center">

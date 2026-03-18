@@ -15,7 +15,7 @@ function getInitials(name) {
 export default function StoreCard({ store, config }) {
   return (
     <Link
-      href={`/marketplace/tienda/${store.id}`}
+      href={`/tienda/${store.id}`}
       className="group bg-white rounded-2xl border border-gray-100 overflow-hidden
                  hover:border-[#45C93E]/40 hover:shadow-lg transition-all"
     >
