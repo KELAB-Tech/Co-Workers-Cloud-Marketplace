@@ -61,7 +61,7 @@ export default function NavbarMarketplace() {
     e.preventDefault();
     if (!query.trim()) return;
     setShowDropdown(false);
-    router.push(`/marketplace?name=${encodeURIComponent(query.trim())}`);
+    router.push(`/products?name=${encodeURIComponent(query.trim())}`);
   };
 
   const closeAll = () => {
@@ -196,7 +196,7 @@ export default function NavbarMarketplace() {
         <button onClick={() => setOpenMobile(true)}>
           <Menu className="w-6 h-6 text-[#000180]" />
         </button>
-        <Link href="/marketplace" className="font-bold text-[#000180]">
+        <Link href="/" className="font-bold text-[#000180]">
           Co-Workers <span className="text-[#45C93E]">Cloud</span>
         </Link>
         <Link href="/checkout" className="relative">
@@ -248,14 +248,14 @@ export default function NavbarMarketplace() {
             <nav className="flex flex-col gap-3">
               <Link
                 onClick={closeAll}
-                href="/marketplace/categorias"
+                href="/categorias"
                 className="font-semibold text-gray-700 hover:text-[#000180]"
               >
                 Categorías
               </Link>
               <Link
                 onClick={closeAll}
-                href="/marketplace/actores"
+                href="/actores"
                 className="font-semibold text-gray-700 hover:text-[#000180]"
               >
                 Empresas
