@@ -20,7 +20,7 @@ const ACTOR_CONFIG = {
   ADMIN_SECTORIAL: {
     icon: "🏢",
     color: "bg-purple-50 border-purple-200 text-purple-700",
-    label: "Gestores Sectoriales",
+    label: "Productores",
   },
 };
 

@@ -2,7 +2,7 @@ import { Recycle, Wrench, Factory, Truck } from "lucide-react";
 
 const categorias = [
   { title: "Asociaciones de Reciclaje", icon: Recycle },
-  { title: "Gestores Ambientales", icon: Wrench },
+  { title: "Productores", icon: Wrench },
   { title: "Transformadores", icon: Factory },
   { title: "Empresas Transportadoras", icon: Truck },
 ];
