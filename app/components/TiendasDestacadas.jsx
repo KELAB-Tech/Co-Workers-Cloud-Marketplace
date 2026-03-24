@@ -29,7 +29,7 @@ export default async function TiendasDestacadas() {
           Tiendas destacadas
         </h2>
         <Link
-          href="/marketplace/actores"
+          href="/actores"
           className="text-xs font-semibold text-[#45C93E] hover:text-[#000180]"
         >
           Ver todas →
