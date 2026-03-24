@@ -29,6 +29,21 @@ const ACTOR_CONFIG = {
     color: "text-purple-700",
     bg: "bg-purple-50 border-purple-200",
   },
+  // 🔥 nuevos
+  plan_colectivo: {
+    value: "PLAN_COLECTIVO",
+    label: "Planes Colectivos",
+    icon: "📋",
+    color: "text-indigo-700",
+    bg: "bg-indigo-50 border-indigo-200",
+  },
+  sostenibilidad: {
+    value: "SOSTENIBILIDAD",
+    label: "Sostenibilidad",
+    icon: "🌱",
+    color: "text-emerald-700",
+    bg: "bg-emerald-50 border-emerald-200",
+  },
 };
 
 export async function generateMetadata({ params }) {

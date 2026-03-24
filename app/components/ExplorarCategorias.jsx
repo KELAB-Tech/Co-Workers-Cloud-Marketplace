@@ -5,7 +5,7 @@ const categorias = [
   { title: "Productores", icon: Wrench },
   { title: "Transformadores", icon: Factory },
   { title: "Empresas Transportadoras", icon: Truck },
-];
+];dr
 
 export default function ExplorarCategorias() {
   return (

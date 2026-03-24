@@ -28,6 +28,18 @@ const ACTOR_CONFIG = {
     color: "text-purple-700",
     bg: "bg-purple-50 border-purple-200",
   },
+  plan_colectivo: {
+    label: "Planes Colectivos",
+    icon: "📋",
+    color: "text-indigo-700",
+    bg: "bg-indigo-50 border-indigo-200",
+  },
+  sostenibilidad: {
+    label: "Sostenibilidad",
+    icon: "🌱",
+    color: "text-emerald-700",
+    bg: "bg-emerald-50 border-emerald-200",
+  },
 };
 
 const DEFAULT_CONFIG = {
@@ -54,13 +66,21 @@ export const metadata = {
 
 export default async function ActoresPage() {
   // Cargar todas las categorías en paralelo
-  const [recicladores, transformadores, transportadores, gestores] =
-    await Promise.all([
-      getStoresByActor("RECICLADOR"),
-      getStoresByActor("TRANSFORMADOR"),
-      getStoresByActor("TRANSPORTADOR"),
-      getStoresByActor("ADMIN_SECTORIAL"),
-    ]);
+  const [
+    recicladores,
+    transformadores,
+    transportadores,
+    gestores,
+    planes,
+    sostenibilidad,
+  ] = await Promise.all([
+    getStoresByActor("RECICLADOR"),
+    getStoresByActor("TRANSFORMADOR"),
+    getStoresByActor("TRANSPORTADOR"),
+    getStoresByActor("ADMIN_SECTORIAL"),
+    getStoresByActor("PLAN_COLECTIVO"),
+    getStoresByActor("SOSTENIBILIDAD"),
+  ]);
 
   const sections = [
     {
@@ -82,6 +102,16 @@ export default async function ActoresPage() {
       key: "admin_sectorial",
       stores: gestores,
       config: ACTOR_CONFIG.admin_sectorial,
+    },
+    {
+      key: "PLAN_COLECTIVO",
+      stores: planes,
+      config: ACTOR_CONFIG.plan_colectivo,
+    },
+    {
+      key: "SOSTENIBILIDAD",
+      stores: sostenibilidad,
+      config: ACTOR_CONFIG.sostenibilidad,
     },
   ];
 

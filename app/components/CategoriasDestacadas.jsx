@@ -22,6 +22,16 @@ const ACTOR_CONFIG = {
     color: "bg-purple-50 border-purple-200 text-purple-700",
     label: "Productores",
   },
+  PLAN_COLECTIVO: {
+    icon: "📋",
+    color: "bg-indigo-50 border-indigo-200 text-indigo-700",
+    label: "Plan Colectivo",
+  },
+  SOSTENIBILIDAD: {
+    icon: "🌱",
+    color: "bg-emerald-50 border-emerald-200 text-emerald-700",
+    label: "Sostenibilidad",
+  },
 };
 
 export default async function CategoriasDestacadas() {
