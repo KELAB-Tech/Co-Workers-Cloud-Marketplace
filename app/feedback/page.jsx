@@ -16,47 +16,57 @@ export default function FeedbackPage() {
     message: "",
   });
 
+  const [errorMsg, setErrorMsg] = useState("");
+
   const handleChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
+    setErrorMsg("");
+  };
+
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const validateForm = () => {
+    if (!form.message) return "El mensaje es obligatorio";
+    if (form.message.length < 5) return "El mensaje es muy corto";
+
+    if (form.email && !isValidEmail(form.email)) return "El email no es válido";
+
+    if (!form.type) return "Selecciona un tipo";
+
+    if (!captchaToken) return "Verifica el captcha";
+
+    return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.message) {
-      alert("El mensaje es obligatorio");
-      return;
-    }
-
-    if (form.message.length < 5) {
-      alert("El mensaje es muy corto");
-      return;
-    }
-
-    if (!captchaToken) {
-      alert("Verifica el captcha");
+    const validationError = validateForm();
+    if (validationError) {
+      setErrorMsg(validationError);
       return;
     }
 
     setLoading(true);
 
     try {
-      // 🔐 VALIDAR CAPTCHA EN BACKEND
+      // 🔐 validar captcha en backend
       const verify = await fetch("/api/verify-captcha", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ token: captchaToken }),
       });
 
       const data = await verify.json();
 
-      if (!data.success) {
-        throw new Error("Captcha inválido");
-      }
+      if (!data.success) throw new Error("Captcha inválido");
 
-      // ✅ INSERTAR EN SUPABASE
+      // 💾 insertar en supabase
       const { error } = await supabase.from("feedback").insert([
         {
           name: form.name || null,
@@ -71,6 +81,7 @@ export default function FeedbackPage() {
 
       alert("✅ Feedback enviado");
 
+      // reset
       setForm({
         name: "",
         email: "",
@@ -79,13 +90,17 @@ export default function FeedbackPage() {
       });
       setRating(0);
       setCaptchaToken(null);
+      setErrorMsg("");
     } catch (error) {
       console.error(error);
-      alert("❌ Error enviando feedback");
+      setErrorMsg("Error enviando feedback");
     } finally {
       setLoading(false);
     }
   };
+
+  const isDisabled =
+    loading || !form.message || form.message.length < 5 || !captchaToken;
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
@@ -97,74 +112,57 @@ export default function FeedbackPage() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Nombre */}
-          <div>
-            <label className="text-sm font-medium">Nombre (opcional)</label>
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              type="text"
-              placeholder="Tu nombre"
-              className="w-full mt-1 p-3 border rounded-lg"
-            />
-          </div>
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Nombre (opcional)"
+            className="w-full p-3 border rounded-lg"
+          />
 
           {/* Email */}
-          <div>
-            <label className="text-sm font-medium">Email (opcional)</label>
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="tu@email.com"
-              className="w-full mt-1 p-3 border rounded-lg"
-            />
-          </div>
+          <input
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="Email (opcional)"
+            className="w-full p-3 border rounded-lg"
+          />
 
           {/* Tipo */}
-          <div>
-            <label className="text-sm font-medium">Tipo</label>
-            <select
-              name="type"
-              value={form.type}
-              onChange={handleChange}
-              className="w-full mt-1 p-3 border rounded-lg"
-            >
-              <option value="SUGGESTION">Sugerencia</option>
-              <option value="BUG">Problema</option>
-              <option value="OPINION">Opinión</option>
-            </select>
-          </div>
+          <select
+            name="type"
+            value={form.type}
+            onChange={handleChange}
+            className="w-full p-3 border rounded-lg"
+          >
+            <option value="SUGGESTION">Sugerencia</option>
+            <option value="BUG">Problema</option>
+            <option value="OPINION">Opinión</option>
+          </select>
 
           {/* Mensaje */}
-          <div>
-            <label className="text-sm font-medium">Mensaje *</label>
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Escribe tu mensaje..."
-              className="w-full mt-1 p-3 border rounded-lg min-h-[120px]"
-            />
-          </div>
+          <textarea
+            name="message"
+            value={form.message}
+            onChange={handleChange}
+            placeholder="Escribe tu mensaje..."
+            className="w-full p-3 border rounded-lg min-h-[120px]"
+          />
 
           {/* Rating */}
-          <div>
-            <label className="text-sm font-medium">Calificación</label>
-            <div className="flex gap-2 mt-2">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <span
-                  key={n}
-                  onClick={() => setRating(n)}
-                  className={`cursor-pointer text-2xl ${
-                    rating >= n ? "text-yellow-400" : "text-gray-300"
-                  }`}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <span
+                key={n}
+                onClick={() => setRating(n)}
+                className={`cursor-pointer text-2xl ${
+                  rating >= n ? "text-yellow-400" : "text-gray-300"
+                }`}
+              >
+                ★
+              </span>
+            ))}
           </div>
 
           {/* CAPTCHA 🔐 */}
@@ -175,10 +173,15 @@ export default function FeedbackPage() {
             />
           </div>
 
+          {/* Error */}
+          {errorMsg && (
+            <p className="text-red-500 text-sm text-center">{errorMsg}</p>
+          )}
+
           {/* Botón */}
           <button
             type="submit"
-            disabled={loading || !form.message || !captchaToken}
+            disabled={isDisabled}
             className="w-full bg-[#000180] text-white py-3 rounded-lg hover:opacity-90 disabled:opacity-50"
           >
             {loading ? "Enviando..." : "Enviar Feedback"}
