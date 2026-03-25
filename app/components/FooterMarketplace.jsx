@@ -1,8 +1,10 @@
 // app/(marketplace)/components/FooterMarketplace.jsx
+import Link from "next/link";
+
 export default function FooterMarketplace() {
   return (
     <footer className="bg-gradient-to-r from-[#000180] to-[#001a8a] text-white mt-20">
-      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <h3 className="text-xl font-bold mb-2">
             Waste<span className="text-[#45C93E]">Store</span>
@@ -29,6 +31,31 @@ export default function FooterMarketplace() {
             <li>Comercialización segura</li>
             <li>Perfiles verificados</li>
             <li>Soporte especializado</li>
+          </ul>
+        </div>
+
+        {/* NUEVA SECCIÓN */}
+        <div>
+          <h4 className="font-semibold mb-2">Ayuda</h4>
+          <ul className="space-y-1 text-sm text-gray-300">
+            <li>
+              <Link href="/contacto" className="hover:text-white transition">
+                Contacto
+              </Link>
+            </li>
+            <li>
+              <Link href="/soporte" className="hover:text-white transition">
+                Soporte
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/feedback"
+                className="text-[#45C93E] font-medium hover:underline"
+              >
+                💬 Enviar sugerencia
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
