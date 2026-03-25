@@ -54,7 +54,7 @@ export default function FeedbackPage() {
 
     try {
       // 🔐 validar captcha en backend
-      const verify = await fetch("/lib/api/verify-captcha", {
+      const verify = await fetch("/api/verify-captcha", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
