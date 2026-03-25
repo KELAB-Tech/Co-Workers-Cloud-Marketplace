@@ -5,8 +5,13 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+export const metadata = {
+  title: "Marketplace | Waste Store – R&R Kelab S.A.S",
+  description:
+    "Marketplace digital para la comercialización segura de materiales aprovechables.",
+};
 
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({ children }) {
   return (
